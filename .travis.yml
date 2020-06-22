@@ -44,12 +44,12 @@ script:
   - python3 -m pytest foo_test.py
 
 before_deploy:
-  - python3 -m cibuildwheel --output-dir wheelhouse
+  - python3 -m cibuildwheel --output-dir dist/
 
 deploy:
   provider: pypi
   server: http://fuchikoma.duckdns.org:3141/travis/simple/
-  distributions: sdist bdist_wheel
+  distributions: sdist
   skip_existing: true
   username: travis
   password:
