@@ -19,12 +19,16 @@ jobs:
   - os: linux
     python: 3.7
     env: NO_DEPLOY=1
+    name: "Linux Python 3.7"
   - os: linux
     python: 3.8
+    name: "Linux Python 3.8"
   - os: osx
     language: generic
+    name: "Mac OS Python Homebrew"
     env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
   - os: windows
+    name: "Windows Python 3.8"
     language: shell
     before_install:
         # install Python 3 and make sure it's on PATH as 'python3'
@@ -57,4 +61,5 @@ deploy:
     secure: f13KdEUT7RrUz7t61UzJEj3DSTnH9dIjaw4u9t43dunMh2og+gHh2+gqP2lGSMWYV0PHmtCNpKh/ZA56Wry12Ak+YgWIPY9Cbbf6KKD0OQgKFiH7TDKglH31y9deEb4ASXbnPlFjBhDXu1D7CwCd/RZx8tJjBinR6qEhLEDZoLYl8Qy72lmFioTYEbfM3G6+scHtZ3phIRzIm0cYQRtTupCPvKS99w8zZm9w7rICZy0akdk3dxr58Z06gAdDl6uPARfbHHhGb5t+OMhg+QQ1T85lODsUfOXvTqofvOajD8DQ52B4RR93dmmnS+nXd026AaDPa45m2Qt0xYT7jCL3QkrZ93WoUEnuiWb9/NVagZfvyNNtR/LtFEkga4JEhSkLXvQIQlSj9w/P+Bfha+cwUmqDsxDVsKVlL92jrZOZezWq8ywgl24km0RasEfSWaOUiQnw4DCneI7c7D6AB9GIcrEwxJwS3D+EVhJKyrhsbKnJ0HB7Z293lmJ1JCKas+LMT/pp0k0vePOpPBbi0W4y0bFziCtK0tLEIOxPNy40KcjFN2eSqRD02Cr37vjdh9/CP52Iu8Zmg5KdiZZA6a7nDDnaJpbn/rvDgQ0tfxK4bnPxvgwcGbfT5dpPIovwQMxtegBtOa1S2a/rKLbWzVdk+F3YsRICl6qi/LOvFPyOJKU=
   edge: true # opt in to dpl v2
   on:
-    -z $NO_DEPLOY
+    branch: master
+    condition: -z $NO_DEPLOY
