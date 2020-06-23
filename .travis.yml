@@ -41,7 +41,7 @@ jobs:
         - choco install python3 --version 3.8.3
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
-        # - choco install visualstudio2019-workload-vctools
+    # env: PATH="/c/Python38:/c/Python38/Scripts:/c/Program\\ Files/git/usr/bin/:$PATH" WIN_DEPLOY=1
     env: PATH=/c/Python38:/c/Python38/Scripts:$PATH WIN_DEPLOY=1
 
 # ==============================================================================
@@ -66,15 +66,17 @@ before_deploy:
   - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:
-  provider: script
-  script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/ --skip-existing
-  edge: true # opt in to dpl v2
-  on:
-    branch: master
-    condition: -z $NO_DEPLOY && -z $WIN_DEPLOY
+  - provider: script
+    script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/ --skip-existing
+    edge: true # opt in to dpl v2
+    on:
+      branch: master
+      condition: -z $NO_DEPLOY && -z $WIN_DEPLOY
 
 # ------------------------------------------------------------------------------
 # Special case for Windows
+# NB: cannot use deploy: because ruby uses bash from MinGW instead of git-bash
+#     to execute the script and escaping the spaces does not work
 
 after_success:
   - |
