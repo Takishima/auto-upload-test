@@ -14,8 +14,7 @@ addons:
       - llvm
       - python
 
-env:
-  - CIBW_SKIP="cp27-* pp27-*" PYTHON_EXEC=python3
+env: CIBW_SKIP="cp27-* pp27-*" BASH_EXEC=bash
 
 jobs:
   include:
@@ -39,26 +38,33 @@ jobs:
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         - choco install visualstudio2019-workload-vctools
-    env:
-      - PATH=/c/Python38:/c/Python38/Scripts:$PATH PYTHON_EXEC=python
+    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH BASH_EXEC=/c/Program\ Files/Git/git-bash
 
 install:
-  - $PYTHON_EXEC -m pip install -U numpy pytest
-  - $PYTHON_EXEC -m pip freeze
+  - python3 -m pip install -U numpy pytest
+  - python3 -m pip freeze
 
 before_script:
   - "echo 'backend: Agg' > matplotlibrc"
 
 script:
   - cat matplotlibrc
-  - $PYTHON_EXEC -m pytest foo_test.py
+  - python3 -m pytest foo_test.py
 
 before_deploy:
-  - $PYTHON_EXEC -m pip install -U wheel cibuildwheel twine
+  - python3 -m pip install -U wheel cibuildwheel twine
+  - |-
+      case $TRAVIS_OS_NAME in
+        windows)
+          echo $(cygpath.exe -w $SHELL)
+          echo $SHELL
+          echo $BASH
+      esac
+          
 
 deploy:
   provider: script
-  script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+  script: $BASH_EXEC $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master
