@@ -55,6 +55,7 @@ before_script:
 
 script:
   - cat matplotlibrc
+  - python3 setup.py build_ext --inplace
   - python3 -m pytest foo_test.py
 
 # ==============================================================================
