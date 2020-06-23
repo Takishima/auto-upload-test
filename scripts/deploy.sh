@@ -17,6 +17,9 @@ username: $DEPLOY_USERNAME
 password: $DEPLOY_PASSWORD
 EOF
 
+echo 'Installing dependencies'
+python3 -m pip install -U wheel cibuildwheel twine
+
 echo 'Building source distribution'
 python3 setup.py sdist
 

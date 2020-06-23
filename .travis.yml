@@ -55,12 +55,9 @@ script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
 
-before_deploy:
-  - python3 -m pip install -U wheel cibuildwheel twine
-
 deploy:
   provider: script
-  script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+  script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master
