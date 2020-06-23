@@ -1,26 +1,11 @@
 #! /bin/bash
 
-section_start()
-{
-    export CURRENT_SECTION=$1
-    travis_fold start $CURRENT_SECTION
-    travis_time_start
-}
-
-section_finish()
-{
-    travis_time_finish
-    travis_fold stop $CURRENT_SECTION
-}
-
-# ------------------------------------------------------------------------------
-
 DIST_DIR=$1
 shift
 
 # ==============================================================================
 
-section_start "deploy.init"
+echo 'Setting up default repository'
 cat << EOF > ~/.pypirc
 [distutils]
 index-servers=
@@ -31,18 +16,16 @@ repository: $DEPLOY_URL
 username: $DEPLOY_USERNAME
 password: $DEPLOY_PASSWORD
 EOF
-section_finish
 
-section_start "deploy.build"
+echo 'Building source distribution'
 python3 setup.py sdist
+
+echo 'Building binary distributions'
 python3 -m cibuildwheel --output-dir dist/
-section_finish
 
-section_start "deploy.check"
+echo 'Running twine check'
 python3 -m twine check $DIST_DIR
-section_finish
 
-section_start "deploy.upload"
+echo 'Running twine upload'
 python3 -m twine upload "$@" -r pypi dist/*
-section_finish
 
