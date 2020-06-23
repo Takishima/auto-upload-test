@@ -16,6 +16,7 @@ addons:
 
 env:
   - CIBW_SKIP="cp27-* pp27-*"
+  - PYTHON_EXEC=python3
 
 jobs:
   include:
@@ -39,21 +40,23 @@ jobs:
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         - choco install visualstudio2019-workload-vctools
-    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
+    env:
+      - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+      - PYTHON_EXEC=python
 
 install:
-  - python3 -m pip install -U numpy pytest
-  - python3 -m pip freeze
+  - $PYTHON_EXEC -m pip install -U numpy pytest
+  - $PYTHON_EXEC -m pip freeze
 
 before_script:
   - "echo 'backend: Agg' > matplotlibrc"
 
 script:
   - cat matplotlibrc
-  - python3 -m pytest foo_test.py
+  - $PYTHON_EXEC -m pytest foo_test.py
 
 before_deploy:
-  - python3 -m pip install -U wheel cibuildwheel twine
+  - $PYTHON_EXEC -m pip install -U wheel cibuildwheel twine
 
 deploy:
   provider: script
