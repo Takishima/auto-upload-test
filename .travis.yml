@@ -38,7 +38,7 @@ jobs:
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         - choco install visualstudio2019-workload-vctools
-    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH BASH_EXEC=/c/Program\ Files/Git/git-bash
+    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH BASH_EXEC=/c/program\\ files/git/usr/bin/bash.exe
 
 install:
   - python3 -m pip install -U numpy pytest
