@@ -15,8 +15,7 @@ addons:
       - python
 
 env:
-  - CIBW_SKIP="cp27-* pp27-*"
-  - PYTHON_EXEC=python3
+  - CIBW_SKIP="cp27-* pp27-*" PYTHON_EXEC=python3
 
 jobs:
   include:
@@ -41,8 +40,7 @@ jobs:
         - python3 -m pip install --upgrade pip
         - choco install visualstudio2019-workload-vctools
     env:
-      - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-      - PYTHON_EXEC=python
+      - PATH=/c/Python38:/c/Python38/Scripts:$PATH PYTHON_EXEC=python
 
 install:
   - $PYTHON_EXEC -m pip install -U numpy pytest
