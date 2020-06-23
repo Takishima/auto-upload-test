@@ -35,7 +35,7 @@ section_finish
 
 section_start "deploy.build"
 python3 setup.py sdist
-# python3 -m cibuildwheel --output-dir dist/
+python3 -m cibuildwheel --output-dir dist/
 section_finish
 
 section_start "deploy.check"
