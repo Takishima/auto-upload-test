@@ -61,7 +61,7 @@ before_deploy:
     
 deploy:
   provider: script
-  script: git-bash.exe $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+  script: /c/program\ files/git/usr/bin/bash.exe $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master
