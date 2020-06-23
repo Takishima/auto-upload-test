@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 DIST_DIR=$1
 shift
