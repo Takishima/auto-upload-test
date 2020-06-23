@@ -56,10 +56,11 @@ before_deploy:
   - python3 -m pip install -U wheel cibuildwheel twine
   - python3 -m pip freeze
   - python3 -m twine --help
+  - which python3
 
 deploy:
   provider: script
-  script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+  script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master

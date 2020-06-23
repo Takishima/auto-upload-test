@@ -23,6 +23,9 @@ python3 setup.py sdist
 echo 'Building binary distributions'
 python3 -m cibuildwheel --output-dir dist/
 
+which python3
+python3 -m pip freeze
+
 echo 'Running twine check'
 python3 -m twine check $DIST_DIR
 
