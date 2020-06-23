@@ -35,14 +35,14 @@ section_finish
 
 section_start "deploy.build"
 python3 setup.py sdist
-python3 -m cibuildwheel --output-dir dist/
-setion_finish
+# python3 -m cibuildwheel --output-dir dist/
+section_finish
 
 section_start "deploy.check"
 python3 -m twine check $DIST_DIR
-setion_finish
+section_finish
 
 section_start "deploy.upload"
 python3 -m twine upload "$@" -r pypi dist/*
-setion_finish
+section_finish
 
