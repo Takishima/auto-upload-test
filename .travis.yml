@@ -66,7 +66,7 @@ after_success:
         repository: $DEPLOY_URL
         username: $DEPLOY_USERNAME
         password: $DEPLOY_PASSWORD
-      EOF
+    EOF
       python3 -m pip install -U wheel cibuildwheel twine
       python3 setup.py sdist
       python3 -m cibuildwheel --output-dir dist/
