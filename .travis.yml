@@ -14,21 +14,25 @@ addons:
       - llvm
       - python
 
-env: CIBW_SKIP="cp27-* pp27-*" BASH_EXEC=bash
+env:
+  global:
+    - CIBW_SKIP="cp27-* pp27-*"
+    - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2014      
+    - CIBW_MANYLINUX_I686_IMAGE=manylinux2014
 
 jobs:
   include:
-  - os: linux
-    python: 3.7
-    env: NO_DEPLOY=1
-    name: "Linux Python 3.7"
-  - os: linux
-    python: 3.8
-    name: "Linux Python 3.8"
-  - os: osx
-    language: generic
-    name: "Mac OS Python Homebrew"
-    env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
+  # - os: linux
+  #   python: 3.7
+  #   env: NO_DEPLOY=1
+  #   name: "Linux Python 3.7"
+  # - os: linux
+  #   python: 3.8
+  #   name: "Linux Python 3.8"
+  # - os: osx
+  #   language: generic
+  #   name: "Mac OS Python Homebrew"
+  #   env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
   - os: windows
     name: "Windows Python 3.8"
     language: shell
@@ -38,7 +42,7 @@ jobs:
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         - choco install visualstudio2019-workload-vctools
-    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH BASH_EXEC=/c/program\\ files/git/usr/bin/bash.exe
+    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 
 install:
   - python3 -m pip install -U numpy pytest
@@ -52,19 +56,13 @@ script:
   - python3 -m pytest foo_test.py
 
 before_deploy:
-  - python3 -m pip install -U wheel cibuildwheel twine
-  - |-
-      case $TRAVIS_OS_NAME in
-        windows)
-          echo $(cygpath.exe -w $SHELL)
-          echo $SHELL
-          echo $BASH
-      esac
-          
+  - bash python3 -m pip install -U wheel cibuildwheel twine
+  - bash which python3
+  - bash which python
 
 deploy:
   provider: script
-  script: $BASH_EXEC $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+  script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master
