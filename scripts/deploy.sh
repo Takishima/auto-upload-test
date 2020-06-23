@@ -12,9 +12,9 @@ index-servers=
     pypi
 
 [pypi]
-repository: $DEPLOY_URL
-username: $DEPLOY_USERNAME
-password: $DEPLOY_PASSWORD
+repository: $TWINE_REPOSITORY_URL
+username: $TWINE_USERNAME
+password: $TWINE_PASSWORD
 EOF
 
 echo 'Building source distribution'
