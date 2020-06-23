@@ -47,15 +47,16 @@ install:
 
 before_script:
   - "echo 'backend: Agg' > matplotlibrc"
-  - export -f travis_fold
-  - export -f travis_time_start
-  - export -f travis_time_finish
 
 script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
 
 before_deploy:
+  - export -f travis_nanoseconds
+  - export -f travis_fold
+  - export -f travis_time_start
+  - export -f travis_time_finish
   - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:
