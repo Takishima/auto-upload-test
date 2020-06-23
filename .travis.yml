@@ -59,7 +59,7 @@ script:
 
 # ==============================================================================
 # Deployment (Linux and Mac OS)
-    
+
 before_deploy:
   - python3 -m pip install -U wheel cibuildwheel twine
 

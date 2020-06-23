@@ -27,7 +27,7 @@ python3 -m cibuildwheel --output-dir dist/
 python3 -m pip install twine
 
 echo 'Running twine check'
-python3 -m twine check $DIST_DIR
+python3 -m twine check $DIST_DIR/*
 
 echo 'Running twine upload'
 python3 -m twine upload $@ -r pypi dist/*
