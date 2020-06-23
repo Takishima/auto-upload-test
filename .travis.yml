@@ -14,6 +14,9 @@ addons:
       - llvm
       - python
 
+env:
+  - CIBW_SKIP="cp27-* pp27-*"
+
 jobs:
   include:
   - os: linux
@@ -35,30 +38,29 @@ jobs:
         - choco install python --version 3.8.0
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
+        - choco install visualstudio2019-workload-vctools
     env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 
 install:
-  - python3 -m pip install cibuildwheel numpy pytest
+  - python3 -m pip install -U numpy pytest
   - python3 -m pip freeze
 
 before_script:
   - "echo 'backend: Agg' > matplotlibrc"
+  - export -f travis_fold
+  - export -f travis_time_start
+  - export -f travis_time_finish
 
 script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
 
 before_deploy:
-  - python3 -m cibuildwheel --output-dir dist/
+  - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:
-  provider: pypi
-  server: http://fuchikoma.duckdns.org:3141/travis/simple/
-  distributions: sdist
-  skip_existing: true
-  username: travis
-  password:
-    secure: f13KdEUT7RrUz7t61UzJEj3DSTnH9dIjaw4u9t43dunMh2og+gHh2+gqP2lGSMWYV0PHmtCNpKh/ZA56Wry12Ak+YgWIPY9Cbbf6KKD0OQgKFiH7TDKglH31y9deEb4ASXbnPlFjBhDXu1D7CwCd/RZx8tJjBinR6qEhLEDZoLYl8Qy72lmFioTYEbfM3G6+scHtZ3phIRzIm0cYQRtTupCPvKS99w8zZm9w7rICZy0akdk3dxr58Z06gAdDl6uPARfbHHhGb5t+OMhg+QQ1T85lODsUfOXvTqofvOajD8DQ52B4RR93dmmnS+nXd026AaDPa45m2Qt0xYT7jCL3QkrZ93WoUEnuiWb9/NVagZfvyNNtR/LtFEkga4JEhSkLXvQIQlSj9w/P+Bfha+cwUmqDsxDVsKVlL92jrZOZezWq8ywgl24km0RasEfSWaOUiQnw4DCneI7c7D6AB9GIcrEwxJwS3D+EVhJKyrhsbKnJ0HB7Z293lmJ1JCKas+LMT/pp0k0vePOpPBbi0W4y0bFziCtK0tLEIOxPNy40KcjFN2eSqRD02Cr37vjdh9/CP52Iu8Zmg5KdiZZA6a7nDDnaJpbn/rvDgQ0tfxK4bnPxvgwcGbfT5dpPIovwQMxtegBtOa1S2a/rKLbWzVdk+F3YsRICl6qi/LOvFPyOJKU=
+  provider: script
+  script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
   edge: true # opt in to dpl v2
   on:
     branch: master
