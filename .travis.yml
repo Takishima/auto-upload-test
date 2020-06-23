@@ -38,7 +38,7 @@ jobs:
     language: shell
     before_install:
         # install Python 3 and make sure it's on PATH as 'python3'
-        - choco install python3
+        - choco install python3 --version 3.8.0
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         # - choco install visualstudio2019-workload-vctools
@@ -54,15 +54,35 @@ before_script:
 script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
-  - /c/program\ files/git/usr/bin/bash.exe -c "python3 --version"
 
-before_deploy:
-  - python3 -m pip install -U wheel cibuildwheel twine
-    
-deploy:
-  provider: script
-  script: /c/program\ files/git/usr/bin/bash.exe $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
-  edge: true # opt in to dpl v2
-  on:
-    branch: master
-    condition: -z $NO_DEPLOY
+after_success:
+  - |
+    if [[ -z $NO_DEPLOY ]]; then
+      cat << EOF > ~/.pypirc
+        [distutils]
+          index-servers=
+            pypi
+        [pypi]
+        repository: $DEPLOY_URL
+        username: $DEPLOY_USERNAME
+        password: $DEPLOY_PASSWORD
+        EOF
+      python3 -m pip install -U wheel cibuildwheel twine
+      python3 setup.py sdist
+      python3 -m cibuildwheel --output-dir dist/
+      python3 -m pip install twine
+      python3 -m twine check dist/
+      python3 -m twine upload "$@" -r pypi dist/*
+    fi
+
+# Ideally we would want to do something like this, but this fails on Windows...
+# before_deploy:
+#   - python3 -m pip install -U wheel cibuildwheel twine
+#
+# deploy:
+#   provider: script
+#   script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
+#   edge: true # opt in to dpl v2
+#   on:
+#     branch: master
+#     condition: -z $NO_DEPLOY
