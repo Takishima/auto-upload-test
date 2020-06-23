@@ -22,27 +22,29 @@ env:
 
 jobs:
   include:
-  # - os: linux
-  #   python: 3.7
-  #   env: NO_DEPLOY=1
-  #   name: "Linux Python 3.7"
-  # - os: linux
-  #   python: 3.8
-  #   name: "Linux Python 3.8"
-  # - os: osx
-  #   language: generic
-  #   name: "Mac OS Python Homebrew"
-  #   env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
+  - os: linux
+    python: 3.7
+    env: NO_DEPLOY=1
+    name: "Linux Python 3.7"
+  - os: linux
+    python: 3.8
+    name: "Linux Python 3.8"
+  - os: osx
+    language: generic
+    name: "Mac OS Python Homebrew"
+    env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
   - os: windows
     name: "Windows Python 3.8"
     language: shell
     before_install:
-        # install Python 3 and make sure it's on PATH as 'python3'
-        - choco install python3 --version 3.8.0
+        - choco install python3 --version 3.8.3
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         # - choco install visualstudio2019-workload-vctools
-    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
+    env: PATH=/c/Python38:/c/Python38/Scripts:$PATH WIN_DEPLOY=1
+
+# ==============================================================================
+# Installation and testing
 
 install:
   - python3 -m pip install -U numpy pytest
@@ -55,25 +57,32 @@ script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
 
+# ==============================================================================
+# Deployment (Linux and Mac OS)
+    
+before_deploy:
+  - python3 -m pip install -U wheel cibuildwheel twine
+
+deploy:
+  provider: script
+  script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/ --skip-existing
+  edge: true # opt in to dpl v2
+  on:
+    branch: master
+    condition: -z $NO_DEPLOY && -z $WIN_DEPLOY
+
+# ------------------------------------------------------------------------------
+# Special case for Windows
+
 after_success:
   - |
-    if [[ -z $NO_DEPLOY ]]; then
+    if [[ -n $WIN_DEPLOY ]]; then
       python3 -m pip install -U wheel cibuildwheel twine
       python3 setup.py sdist
-      # python3 -m cibuildwheel --output-dir dist/
+      python3 -m cibuildwheel --output-dir dist/
       python3 -m pip install twine
       python3 -m twine check dist/*
-      python3 -m twine upload --verbose dist/*
+      python3 -m twine upload --skip-existing dist/*
     fi
 
-# Ideally we would want to do something like this, but this fails on Windows...
-# before_deploy:
-#   - python3 -m pip install -U wheel cibuildwheel twine
-#
-# deploy:
-#   provider: script
-#   script: bash $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/
-#   edge: true # opt in to dpl v2
-#   on:
-#     branch: master
-#     condition: -z $NO_DEPLOY
+# ==============================================================================

@@ -30,5 +30,5 @@ echo 'Running twine check'
 python3 -m twine check $DIST_DIR
 
 echo 'Running twine upload'
-python3 -m twine upload "$@" -r pypi dist/*
+python3 -m twine upload $@ -r pypi dist/*
 
