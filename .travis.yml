@@ -54,7 +54,7 @@ before_script:
 script:
   - cat matplotlibrc
   - python3 -m pytest foo_test.py
-  - /c/program\\ files/git/usr/bin/bash.exe -c "python3 --version"
+  - /c/program\ files/git/usr/bin/bash.exe -c "python3 --version"
 
 before_deploy:
   - python3 -m pip install -U wheel cibuildwheel twine
