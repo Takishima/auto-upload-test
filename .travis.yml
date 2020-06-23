@@ -19,7 +19,7 @@ env:
     - CIBW_SKIP="cp27-* pp27-*"
     - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2014      
     - CIBW_MANYLINUX_I686_IMAGE=manylinux2014
-    - CIBW_MANYLINUX_PYPY_X86_64_IMAGE=manylinux2014
+    - CIBW_MANYLINUX_PYPY_X86_64_IMAGE=pypywheels/manylinux2014-pypy_x86_64
 
 jobs:
   include:
