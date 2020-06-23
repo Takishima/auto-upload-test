@@ -38,8 +38,8 @@ jobs:
     language: shell
     before_install:
         # install Python 3 and make sure it's on PATH as 'python3'
-        - choco install python --version 3.8.0
-        - ln -s /c/Python38/python.exe /c/Python38/python3.exe
+        - choco install python3
+        # - ln -s /c/Python38/python.exe /c/Python38/python3.exe
         - python3 -m pip install --upgrade pip
         # - choco install visualstudio2019-workload-vctools
     env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
