@@ -54,9 +54,6 @@ script:
 
 before_deploy:
   - python3 -m pip install -U wheel cibuildwheel twine
-  - python3 -m pip freeze
-  - python3 -m twine --help
-  - which python3
 
 deploy:
   provider: script
