@@ -17,21 +17,28 @@ username: $DEPLOY_USERNAME
 password: $DEPLOY_PASSWORD
 EOF
 
+PYTHON=python3
+if [[ ! -e $PYTHON ]]; then
+    PYTHON=python
+fi
+
+echo $($PYTHON --version)
+
 echo 'Installing dependencies'
-python3 -m pip install -U wheel cibuildwheel twine
+$PYTHON -m pip install -U wheel cibuildwheel twine
 
 echo 'Building source distribution'
-python3 setup.py sdist
+$PYTHON setup.py sdist
 
 echo 'Building binary distributions'
-python3 -m cibuildwheel --output-dir dist/
+$PYTHON -m cibuildwheel --output-dir dist/
 
 # Make sure that twine is installed (mostly for Mac OS)
-python3 -m pip install twine
+$PYTHON -m pip install twine
 
 echo 'Running twine check'
-python3 -m twine check $DIST_DIR
+$PYTHON -m twine check $DIST_DIR
 
 echo 'Running twine upload'
-python3 -m twine upload "$@" -r pypi dist/*
+$PYTHON -m twine upload "$@" -r pypi dist/*
 
