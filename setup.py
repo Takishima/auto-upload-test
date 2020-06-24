@@ -279,7 +279,7 @@ setup(
     name="auto-install-test",
     ext_modules=[
         Extension(
-            'example',
+            'package.example',
             sources=['example.cpp'],
             include_dirs=[
                 # Path to pybind11 headers
