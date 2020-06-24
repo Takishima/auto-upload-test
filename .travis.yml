@@ -57,17 +57,14 @@ before_script:
 
 script:
   - cat matplotlibrc
-  - python3 -m pip install -ve .
+  - python3 setup.py build_ext --inplace
   - python3 -m pytest -v
-  - python3 setup.py develop --uninstall
-  - python3 setup.py clean
-  - ls -la
-  - ls -la package/*
 
 # ==============================================================================
 # Deployment (Linux and Mac OS)
 
 before_deploy:
+  - git clean -Xdf
   - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:

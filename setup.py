@@ -276,7 +276,7 @@ class BuildExt(build_ext):
 
 
 setup(
-    name="auto-install-test",
+    name="auto-upload-test",
     ext_modules=[
         Extension(
             'package.example',
