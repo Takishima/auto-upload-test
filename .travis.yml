@@ -1,4 +1,3 @@
-language: python
 addons:
   apt:
     # update: true
@@ -28,7 +27,7 @@ env:
     - DO_DEPLOY=0
 
 os: linux
-arch: amd64
+language: python
 
 python:
   - 3.5
@@ -46,10 +45,10 @@ jobs:
     env: DO_DEPLOY=1
   - python: 3.8
     env: DO_DEPLOY=0
-
   include:
   - os: linux
     arch: arm64
+    python: 3.8
     env: DO_DEPLOY=1
     before_install:
       # work around cache dir owned by root (see https://travis-ci.community/t/7822/6)
