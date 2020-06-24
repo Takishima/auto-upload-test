@@ -7,7 +7,7 @@ addons:
       - python3
       - python3-pip
   homebrew:
-    # update: true
+    update: true
     packages:
       - llvm
       - cmake
@@ -57,6 +57,8 @@ jobs:
     language: generic
     name: "Mac OS Python Homebrew"
     env: CC=clang CXX=clang++ CXXFLAGS=-I/usr/local/include DO_DEPLOY=1
+    before_install:
+      - clang++ --version
   - os: windows
     name: "Windows Python 3.8"
     language: shell
