@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 
 
 class get_pybind_include(object):
@@ -31,5 +31,5 @@ setup(
     long_description='Testing CI upload to Pypi',
     long_description_content_type='text/x-rst',
     version="0.3.0",
-    packages=setuptools.find_packages(),
+    packages=find_packages(),
 )
