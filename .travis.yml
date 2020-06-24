@@ -6,6 +6,13 @@ addons:
       - build-essential
       - python3
       - python3-pip
+  homebrew:
+    # update: true
+    packages:
+      - llvm
+      - cmake
+      - git
+      - python
 
 env:
   global:
@@ -20,6 +27,7 @@ env:
     - DO_DEPLOY=0
 
 os: linux
+osx_image: xcode11.3
 language: python
 
 python:
@@ -49,11 +57,8 @@ jobs:
   - os: osx
     language: generic
     name: "Mac OS Python Homebrew"
-    env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH
-      HOMEBREW_NO_INSTALL_CLEANUP=1 DO_DEPLOY=1 
+    env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH DO_DEPLOY=1 
     before_install:
-      - brew install llvm
-      - brew upgrade cmake git python
       - clang++ --version
   - os: windows
     name: "Windows Python 3.8"
