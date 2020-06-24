@@ -52,8 +52,8 @@ jobs:
     env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH
       HOMEBREW_NO_INSTALL_CLEANUP=1 DO_DEPLOY=1 
     before_install:
-      - brew update
-      - brew install llvm cmake git python
+      - brew install llvm
+      - brew upgrade cmake git python
       - clang++ --version
   - os: windows
     name: "Windows Python 3.8"
