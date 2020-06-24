@@ -1,47 +1,47 @@
-#include <Python.h>
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-static PyObject* example_system(PyObject *self, PyObject *args)
-{
-    const char *command;
-    int sts;
-
-    if (!PyArg_ParseTuple(args, "s", &command))
-        return NULL;
-    sts = system(command);
-    return PyLong_FromLong(sts);
-}
-
-/* Module initialization */
-
-#if PY_MAJOR_VERSION >= 3
-    #define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
-    #define MOD_DEF(m, name, doc, methods, module_state_size) \
-        static struct PyModuleDef moduledef = { \
-            PyModuleDef_HEAD_INIT, name, doc, module_state_size, methods, }; \
-        m = PyModule_Create(&moduledef);
-    #define MOD_RETURN(m) return m;
-#else
-    #define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
-    #define MOD_DEF(m, name, doc, methods, module_state_size) \
-        m = Py_InitModule3(name, methods, doc);
-    #define MOD_RETURN(m) return;
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/complex.h>
+#include <pybind11/stl.h>
+#include <pybind11/pytypes.h>
+#include <vector>
+#include <complex>
+#include <iostream>
+#if defined(_OPENMP)
+#include <omp.h>
 #endif
 
-static PyMethodDef module_methods[] = {
-    {"system", (PyCFunction)example_system, METH_VARARGS, 
-     "Execute a shell command."},
-    {NULL}  /* Sentinel */
+namespace py = pybind11;
+
+class Simulator
+{
+public:
+    Simulator(unsigned int seed): seed_(seed) {}
+
+    int allocate_qubit() { return 42; }
+    void deallocate_qubit() { }
+    
+private:
+    unsigned int seed_;
 };
 
-MOD_INIT(example)
-{
-    PyObject* m;
-
-    MOD_DEF(m, 
-            "example", 
-            "Example module", 
-            module_methods,
-            -1)
-
-    MOD_RETURN(m)
+PYBIND11_MODULE(example, m) {
+     m.doc() = "C++ simulator backend for ProjectQ";
+     
+     py::class_<Simulator>(m, "Simulator")
+	  .def(py::init<unsigned>())
+	  .def("allocate_qubit", &Simulator::allocate_qubit)
+	  .def("deallocate_qubit", &Simulator::deallocate_qubit)
+	  ;
 }

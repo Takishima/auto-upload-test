@@ -47,7 +47,7 @@ jobs:
 # Installation and testing
 
 install:
-  - python3 -m pip install -U numpy pytest
+  - python3 -m pip install -U numpy pytest pybind11
   - python3 -m pip freeze
 
 before_script:
@@ -56,7 +56,7 @@ before_script:
 script:
   - cat matplotlibrc
   - python3 setup.py build_ext --inplace
-  - python3 -m pytest foo_test.py
+  - python3 -m pytest -v
 
 # ==============================================================================
 # Deployment (Linux and Mac OS)
