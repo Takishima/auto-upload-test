@@ -56,8 +56,9 @@ before_script:
 
 script:
   - cat matplotlibrc
-  - python3 setup.py build_ext --inplace
+  - python3 -m pip install -ve .
   - python3 -m pytest -v
+  - python3 -m pip uninstall -y auto-install-test
 
 # ==============================================================================
 # Deployment (Linux and Mac OS)
