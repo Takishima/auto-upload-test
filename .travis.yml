@@ -59,6 +59,9 @@ script:
   - python3 -m pip install -ve .
   - python3 -m pytest -v
   - python3 -m pip uninstall -y auto-install-test
+  - python3 setup.py clean
+  - ls -la
+  - ls -la package/*
 
 # ==============================================================================
 # Deployment (Linux and Mac OS)
