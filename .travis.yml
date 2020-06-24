@@ -25,15 +25,16 @@ jobs:
   include:
   - os: linux
     python: 3.7
-    env: NO_DEPLOY=1
+    env: DO_DEPLOY=0
     name: "Linux Python 3.7"
   - os: linux
     python: 3.8
     name: "Linux Python 3.8"
+    env: DO_DEPLOY=1
   - os: osx
     language: generic
     name: "Mac OS Python Homebrew"
-    env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include
+    env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include DO_DEPLOY=1
   - os: windows
     name: "Windows Python 3.8"
     language: shell
@@ -58,7 +59,7 @@ script:
   - cat matplotlibrc
   - python3 -m pip install -ve .
   - python3 -m pytest -v
-  - python3 -m pip uninstall -y auto-install-test
+  - python3 setup.py develop --uninstall
   - python3 setup.py clean
   - ls -la
   - ls -la package/*
@@ -75,7 +76,7 @@ deploy:
     edge: true # opt in to dpl v2
     on:
       branch: master
-      condition: -z $NO_DEPLOY && -z $WIN_DEPLOY
+      condition: $DO_DEPLOY -eq 1 && -z $WIN_DEPLOY
 
 # ------------------------------------------------------------------------------
 # Special case for Windows
