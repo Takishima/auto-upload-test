@@ -10,8 +10,9 @@ addons:
   homebrew:
     # update: true
     packages:
-      - cmake
       - llvm
+      - cmake
+      - git
       - python
 
 env:
@@ -26,11 +27,9 @@ env:
     - DO_DEPLOY=1
     - DO_DEPLOY=0
 
-os:
-  - linux
-arch:
-  - amd64
-  - arm64
+os: linux
+arch: amd64
+
 python:
   - 3.5
   - 3.6
@@ -47,11 +46,18 @@ jobs:
     env: DO_DEPLOY=1
   - python: 3.8
     env: DO_DEPLOY=0
+
   include:
+  - os: linux
+    arch: arm64
+    env: DO_DEPLOY=1
+    before_install:
+      # work around cache dir owned by root (see https://travis-ci.community/t/7822/6)
+      - sudo chown -fR $USER:$GROUP ~/.cache/pip/wheels
   - os: osx
     language: generic
     name: "Mac OS Python Homebrew"
-    env: CXX=/usr/bin/clang++ CXXFLAGS=-I/usr/local/include DO_DEPLOY=1
+    env: CC=clang CXX=clang++ CXXFLAGS=-I/usr/local/include DO_DEPLOY=1
   - os: windows
     name: "Windows Python 3.8"
     language: shell
