@@ -1,6 +1,7 @@
 #! /bin/bash
 
-python3 -m pip install -r build_requirements.txt
+echo $(python --version)
+python -m pip install -r build_requirements.txt
 
 # Required to build matplotlib with i686 images
 # yum install -y libpng-devel freetype-devel
