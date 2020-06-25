@@ -90,12 +90,13 @@ script:
 # Deployment (Linux and Mac OS)
 
 before_deploy:
-  - git clean -Xdf
+  # - git clean -Xdf
   - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:
   - provider: script
     script: $TRAVIS_BUILD_DIR/scripts/deploy.sh dist/ --skip-existing
+    cleanup: true
     edge: true # opt in to dpl v2
     on:
       branch: master
