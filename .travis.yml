@@ -90,7 +90,6 @@ script:
 # Deployment (Linux and Mac OS)
 
 before_deploy:
-  # - git clean -Xdf
   - python3 -m pip install -U wheel cibuildwheel twine
 
 deploy:
@@ -110,6 +109,7 @@ deploy:
 after_success:
   - |
     if [[ -n $WIN_DEPLOY ]]; then
+      git stash --all
       python3 -m pip install -U wheel cibuildwheel twine
       python3 setup.py sdist
       python3 -m cibuildwheel --output-dir dist/
