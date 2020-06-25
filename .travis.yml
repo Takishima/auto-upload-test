@@ -19,7 +19,9 @@ env:
     - CIBW_SKIP="cp27-* pp27-*"
     - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2014      
     - CIBW_MANYLINUX_I686_IMAGE=manylinux2014
-    - CIBW_BEFORE_BUILD="python3 -m pip install -r build_requirements.txt"
+    - CIBW_BEFORE_BUILD_WINDOWS="python -m pip install -r build_requirements.txt"
+    - CIBW_BEFORE_BUILD_MACOS="python3 -m pip install -r build_requirements.txt"
+    - CIBW_BEFORE_BUILD_LINUX="python3 -m pip install -r build_requirements.txt"
   jobs:
     - DO_DEPLOY=1
     - DO_DEPLOY=0
