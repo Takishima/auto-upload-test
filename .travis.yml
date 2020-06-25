@@ -20,9 +20,7 @@ env:
     - CIBW_SKIP="cp27-* pp27-*"
     - CIBW_MANYLINUX_X86_64_IMAGE=manylinux2014      
     - CIBW_MANYLINUX_I686_IMAGE=manylinux2014
-    - CIBW_BEFORE_BUILD_WINDOWS="python -m pip install -r build_requirements.txt"
-    - CIBW_BEFORE_BUILD_MACOS="python3 -m pip install -r build_requirements.txt"
-    - CIBW_BEFORE_BUILD_LINUX="bash scripts/cibuildwheel_build_deps_linux.sh"
+    - CIBW_BEFORE_BUILD="python3 -m pip install -r build_requirements.txt"
   jobs:
     - DO_DEPLOY=1
     - DO_DEPLOY=0
@@ -59,7 +57,7 @@ jobs:
     language: shell
     name: "Mac OS Python Homebrew"
     env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH DO_DEPLOY=1
-      HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+      HOMEBREW_NO_INSTALL_CLEANUP=TRUE CIBW_SKIP="cp27-* cp35-* pp27-*"
     before_install:
       # - brew install llvm
       - clang++ --version
