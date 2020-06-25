@@ -10,7 +10,6 @@ addons:
   homebrew:
     # update: true
     packages:
-      - llvm
       - cmake
       - git
       - python
@@ -56,10 +55,8 @@ jobs:
     osx_image: xcode11.6
     language: shell
     name: "Mac OS Python Homebrew"
-    env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH DO_DEPLOY=1
-      HOMEBREW_NO_INSTALL_CLEANUP=TRUE CIBW_SKIP="cp27-* cp35-* pp27-*"
+    env: CC=clang CXX=clang++ DO_DEPLOY=1
     before_install:
-      # - brew install llvm
       - clang++ --version
   - os: windows
     name: "Windows Python 3.8"
