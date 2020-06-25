@@ -7,6 +7,14 @@ addons:
       - python3
       - python3-pip
 
+  homebrew:
+    # update: true
+    packages:
+      - llvm
+      - cmake
+      - git
+      - python
+
 env:
   global:
     - CIBW_SKIP="cp27-* pp27-*"
@@ -20,7 +28,6 @@ env:
     - DO_DEPLOY=0
 
 os: linux
-osx_image: xcode11.6
 language: python
 
 python:
@@ -48,11 +55,13 @@ jobs:
       # work around cache dir owned by root (see https://travis-ci.community/t/7822/6)
       - sudo chown -fR $USER:$GROUP ~/.cache/pip/wheels
   - os: osx
-    language: generic
+    osx_image: xcode11.6
+    language: shell
     name: "Mac OS Python Homebrew"
-    env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH DO_DEPLOY=1 
+    env: CC=clang CXX=clang++ PATH=/usr/local/opt/llvm/bin:$PATH DO_DEPLOY=1
+      HOMEBREW_NO_INSTALL_CLEANUP=TRUE
     before_install:
-      - brew install llvm
+      # - brew install llvm
       - clang++ --version
   - os: windows
     name: "Windows Python 3.8"
@@ -68,6 +77,7 @@ jobs:
 # Installation and testing
 
 install:
+  - env
   - python3 -m pip install -U numpy pytest pybind11
   - python3 -m pip freeze
 
